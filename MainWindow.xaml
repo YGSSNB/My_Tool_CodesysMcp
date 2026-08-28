@@ -1,0 +1,335 @@
+<ui:UiWindow x:Class="MCP转编译.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="CODESYS MCP Desktop" Height="820" Width="1180"
+        MinHeight="680" MinWidth="940" Icon="Assets/AppIcon.ico"
+        WindowStartupLocation="CenterScreen" Background="#F4F6F8" FontFamily="Segoe UI">
+    <ui:UiWindow.Resources>
+        <SolidColorBrush x:Key="Ink" Color="#18212B"/>
+        <SolidColorBrush x:Key="Muted" Color="#66727F"/>
+        <SolidColorBrush x:Key="Line" Color="#D7DCE1"/>
+        <SolidColorBrush x:Key="Accent" Color="#087E8B"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="MinHeight" Value="34"/>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource Accent}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#066A75"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#05545D"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="InlineHelp" TargetType="Border">
+            <Setter Property="Background" Value="#E9F5F3"/>
+            <Setter Property="BorderBrush" Value="#82BDB5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+        <Style TargetType="GroupBox" BasedOn="{StaticResource {x:Type GroupBox}}">
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style x:Key="NavButton" TargetType="ToggleButton">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Margin" Value="10,3"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#D9E0E5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#164C52"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#26323E"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </ui:UiWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="72"/><RowDefinition Height="*"/><RowDefinition Height="32"/></Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#18212B" Padding="22,0">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="22"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="CODESYS MCP DESKTOP" Foreground="White" FontSize="20" FontWeight="SemiBold"/>
+                    <TextBlock Text="CODESYS / InoProShop · 41 tools · Localhost MCP" Foreground="#AEB8C1" FontSize="12" Margin="0,4,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="AUTOMATION IDE" Foreground="#AEB8C1" FontSize="11"/>
+                    <TextBlock x:Name="CodesysStatusText" Text="已停止" Foreground="#FFCB69" FontSize="15" FontWeight="SemiBold"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                    <TextBlock Text="MCP SERVER" Foreground="#AEB8C1" FontSize="11"/>
+                    <TextBlock x:Name="McpStatusText" Text="已停止" Foreground="#FFCB69" FontSize="15" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Width="208" HorizontalAlignment="Left" Background="#18212B" BorderBrush="#2B3742" BorderThickness="0,1,1,0">
+            <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <StackPanel Margin="0,14,0,0">
+                    <ToggleButton x:Name="OverviewNavButton" Style="{StaticResource NavButton}" IsChecked="True" Click="OverviewNav_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Home24" FontSize="20" Margin="0,0,12,0"/>
+                            <TextBlock Text="概览" VerticalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </ToggleButton>
+                    <ToggleButton x:Name="TestNavButton" Style="{StaticResource NavButton}" Click="TestNav_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Code24" FontSize="20" Margin="0,0,12,0"/>
+                            <TextBlock Text="测试" VerticalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </ToggleButton>
+                    <ToggleButton x:Name="SettingsNavButton" Style="{StaticResource NavButton}" Click="SettingsNav_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Settings24" FontSize="20" Margin="0,0,12,0"/>
+                            <TextBlock Text="设置" VerticalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </ToggleButton>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Margin="20,0,16,18">
+                    <TextBlock Text="LOCAL MCP" Foreground="#71808D" FontSize="10"/>
+                    <TextBlock Text="管理员权限" Foreground="#AEB8C1" FontSize="12" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl x:Name="MainPages" Grid.Row="1" Margin="226,18,18,18" Background="Transparent" BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabPanel"><Setter Property="Visibility" Value="Collapsed"/></Style>
+            </TabControl.Resources>
+            <TabItem Header="运行">
+                <Grid Margin="0,14,0,0">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="14"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <GroupBox Header="CODESYS / InoProShop">
+                                <StackPanel>
+                                    <TextBlock Text="当前程序" Foreground="{StaticResource Muted}"/>
+                                    <TextBlock x:Name="ActiveIdePathText" Margin="0,6,0,0" FontSize="14" TextWrapping="Wrap" FontWeight="SemiBold"/>
+                                    <TextBlock Text="当前 Profile" Foreground="{StaticResource Muted}" Margin="0,14,0,0"/>
+                                    <TextBlock x:Name="ActiveProfileText" Margin="0,6,0,0" FontSize="14"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                        <Button x:Name="LaunchCodesysButton" Content="启动 / 连接" Style="{StaticResource PrimaryButton}" Click="LaunchCodesys_Click"/>
+                                        <Button x:Name="DisconnectCodesysButton" Content="断开" Click="DisconnectCodesys_Click"/>
+                                        <Button x:Name="CloseCodesysButton" Content="关闭 IDE" Background="#F4D7D7" Click="CloseCodesys_Click"/>
+                                    </StackPanel>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource InlineHelp}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=LaunchCodesysButton}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="启动或连接 CODESYS / InoProShop。管理员权限用于启动需要提升权限的 IDE；程序位置和 Profile 可在设置页修改。"
+                                                   Foreground="#245C55" TextWrapping="Wrap" FontSize="12"/>
+                                    </Border>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <GroupBox Header="MCP 服务">
+                                <StackPanel>
+                                    <TextBlock Text="Streamable HTTP 地址" Foreground="{StaticResource Muted}"/>
+                                    <TextBox x:Name="EndpointBox" IsReadOnly="True" Margin="0,6,0,0"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                                        <Button x:Name="StartServerButton" Content="启动 MCP 服务" Style="{StaticResource PrimaryButton}" Click="StartServer_Click"/>
+                                        <Button x:Name="StopServerButton" Content="停止服务" Click="StopServer_Click" IsEnabled="False"/>
+                                        <Button Content="复制地址" Click="CopyEndpoint_Click"/>
+                                    </StackPanel>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource InlineHelp}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=EndpointBox}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="AI 客户端连接此地址后，会在 initialize 握手中收到服务器用途和使用说明。"
+                                                   Foreground="#245C55" TextWrapping="Wrap" FontSize="12"/>
+                                    </Border>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="快速状态" Margin="0,14,0,0">
+                                <StackPanel>
+                                    <TextBlock x:Name="SessionDetailsText" Text="尚未建立 CODESYS 会话" TextWrapping="Wrap"/>
+                                    <Button Content="刷新状态" HorizontalAlignment="Left" Margin="0,14,0,0" Click="RefreshStatus_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                    <GroupBox Grid.Row="2" Header="运行日志">
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <Button Content="清空" HorizontalAlignment="Right" Padding="10,4" Click="ClearLog_Click"/>
+                            <TextBox x:Name="LogBox" Grid.Row="1" Margin="0,8,0,0" IsReadOnly="True" AcceptsReturn="True" FontFamily="Consolas" FontSize="12"
+                                     VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="测试">
+                <Grid Margin="0,14,0,0">
+                    <Grid.RowDefinitions><RowDefinition Height="225"/><RowDefinition Height="12"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <GroupBox Header="MCP 协议测试">
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="TestConnectionButton" Content="执行 initialize + tools/list" Style="{StaticResource PrimaryButton}" Click="TestConnection_Click"/>
+                                <TextBlock x:Name="ToolCountText" Text="尚未测试" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <ListBox x:Name="ToolsList" Grid.Row="1" Margin="0,12,0,0" BorderBrush="{StaticResource Line}" FontFamily="Consolas" FontSize="12"/>
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Row="2">
+                        <GroupBox Header="IronPython IPC 测试">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                <TextBox x:Name="PythonCodeBox" AcceptsReturn="True" AcceptsTab="True" FontFamily="Consolas" FontSize="13"
+                                         VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                         Text="import scriptengine as se&#x0a;print(&quot;CODESYS scripting is available&quot;)&#x0a;print(&quot;SCRIPT_SUCCESS&quot;)"/>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+                                    <Button x:Name="RunScriptButton" Content="执行脚本" Style="{StaticResource PrimaryButton}" Click="RunScript_Click"/>
+                                    <TextBlock x:Name="ScriptResultText" VerticalAlignment="Center" Foreground="{StaticResource Muted}"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="设置">
+                <ScrollViewer Margin="0,14,0,0" VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <GroupBox Header="程序位置">
+                                <StackPanel>
+                                    <TextBlock Text="自动检测到的安装" Foreground="{StaticResource Muted}"/>
+                                    <ComboBox x:Name="DetectedInstallationsBox" Margin="0,6,0,0" SelectionChanged="DetectedInstallation_SelectionChanged"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                        <Button x:Name="DetectButton" Content="重新检测" Click="DetectInstallations_Click"/>
+                                        <TextBlock x:Name="DetectionStatusText" VerticalAlignment="Center" Foreground="{StaticResource Muted}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="可执行文件" Foreground="{StaticResource Muted}" Margin="0,14,0,0"/>
+                                    <Grid Margin="0,6,0,0">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                        <TextBox x:Name="CodesysPathBox"/>
+                                        <Button Grid.Column="1" Content="浏览" Margin="8,0,0,0" Click="BrowseCodesys_Click"/>
+                                    </Grid>
+                                    <TextBlock Text="Profile 名称" Foreground="{StaticResource Muted}" Margin="0,14,0,0"/>
+                                    <TextBox x:Name="ProfileNameBox" Margin="0,6,0,0"/>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource InlineHelp}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=ProfileNameBox}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="OEM 平台的 Profile 名称可能不同。自动检测只选择程序位置，请按实际产品配置确认。"
+                                                   Foreground="#245C55" TextWrapping="Wrap" FontSize="12"/>
+                                    </Border>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="高级设置" Margin="0,14,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="14"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                        <TextBlock Text="HTTP 端口" Foreground="{StaticResource Muted}"/><TextBox x:Name="PortBox" Text="5180" Margin="0,6,0,0"/>
+                                        <TextBlock Text="命令超时（毫秒）" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/><TextBox x:Name="CommandTimeoutBox" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="2">
+                                        <TextBlock Text="项目工作目录" Foreground="{StaticResource Muted}"/><TextBox x:Name="WorkspaceBox" Margin="0,6,0,0"/>
+                                        <TextBlock Text="IDE 就绪超时（毫秒）" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/><TextBox x:Name="ReadyTimeoutBox" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.ColumnSpan="3">
+                                        <CheckBox x:Name="AutoLaunchCheckBox" Content="MCP 服务启动时自动启动 IDE"/>
+                                        <CheckBox x:Name="KeepAliveCheckBox" Content="退出本程序时保持 IDE 运行" Margin="0,8,0,0"/>
+                                        <TextBlock Text="点击窗口关闭按钮时" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/>
+                                        <ComboBox x:Name="CloseBehaviorBox" Margin="0,6,0,0" SelectedValuePath="Tag">
+                                            <ComboBoxItem Content="最小化到系统托盘" Tag="MinimizeToTray"/>
+                                            <ComboBoxItem Content="退出程序" Tag="Exit"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                            </GroupBox>
+                            <Button Content="保存设置" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,14,0,0" Click="SaveSettings_Click"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <GroupBox Header="让 AI 添加此 MCP 服务器">
+                                <StackPanel>
+                                    <TextBox x:Name="AiConfigurationPromptBox" Height="300" IsReadOnly="True" AcceptsReturn="True"
+                                             FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                        <Button x:Name="CopyAiPromptButton" Content="复制给 AI" Style="{StaticResource PrimaryButton}" Click="CopyAiPrompt_Click"/>
+                                        <Button Content="刷新内容" Click="RefreshAiPrompt_Click"/>
+                                    </StackPanel>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource InlineHelp}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=CopyAiPromptButton}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="复制后粘贴给 Codex、Copilot 或其他 AI，由 AI 按当前客户端格式添加 HTTP MCP。请保持桌面程序运行，不要由客户端子进程启动本 EXE。"
+                                                   Foreground="#245C55" TextWrapping="Wrap" FontSize="12"/>
+                                    </Border>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="2" Background="#E8ECEF" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0">
+            <Grid Margin="18,0">
+                <TextBlock x:Name="FooterText" Text="准备就绪" VerticalAlignment="Center" Foreground="{StaticResource Muted}" FontSize="12"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:UiWindow>
